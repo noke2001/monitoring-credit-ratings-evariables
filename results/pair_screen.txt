@@ -1,0 +1,86 @@
+Pair screen — K = 24, reference share 25%, scale model affine
+stress = median |rho(Y_(t-1), X^res_t)| in NBER recession months minus the same outside them.
+Positive means the historical relation breaks down HARDER in stress, which is the
+configuration an innovation monitor needs in order to fire when it matters.
+acf1 is the lag-one autocorrelation of that same series: low is transient structure,
+high is a slowly reversing one the monitor would accrue on regardless of any event.
+
+  X            Y             cls  |rho| lvl  |rho| res  share>.3   acf1  stress res  stress lvl
+  spread       at_me           6      0.157      0.140      0.20   0.89      +0.260      +0.293
+  spread       rvol_21d        6      0.208      0.148      0.18   0.74      +0.236      +0.248
+  spread       be_me           6      0.177      0.160      0.24   0.92      +0.167      +0.159
+  spread       turn_vol        6      0.123      0.141      0.19   0.91      +0.163      +0.176
+  yield        volatility      6      0.674      0.365      0.52   0.95      +0.155      -0.013
+  spread       debt_ebitda     6      0.128      0.153      0.24   0.91      +0.155      +0.172
+  spr_to_d2d   D2D             6      0.219      0.339      0.54   0.95      +0.144      +0.322
+  yield        rvol_21d        6      0.171      0.115      0.11   0.71      +0.142      +0.135
+  yield        VaR             6      0.644      0.326      0.50   0.94      +0.133      +0.003
+  spread       market_lev      6      0.123      0.152      0.18   0.88      +0.133      +0.145
+  spread       D2D             6      0.217      0.229      0.38   0.93      +0.132      +0.215
+  yield        mom6            6      0.399      0.438      0.65   0.84      +0.132      +0.201
+  spr_to_d2d   turn_vol        6      0.141      0.164      0.22   0.87      +0.124      +0.130
+  spread       me              6      0.220      0.188      0.28   0.92      +0.120      +0.114
+  spread       eq_dur          6      0.136      0.159      0.23   0.90      +0.118      +0.127
+  spr_to_d2d   debt_ebitda     6      0.151      0.166      0.25   0.84      +0.116      +0.113
+  spr_to_d2d   at_me           6      0.167      0.170      0.24   0.85      +0.112      +0.175
+  spr_to_d2d   eq_dur          6      0.129      0.168      0.22   0.83      +0.108      +0.120
+  spread       mom6mspread     6      0.302      0.244      0.39   0.73      +0.107      +0.063
+  yield        coupon          6      0.419      0.218      0.30   0.96      +0.105      -0.064
+  yield        at_me           6      0.136      0.126      0.13   0.89      +0.100      +0.120
+  spr_to_d2d   rvol_21d        6      0.150      0.156      0.24   0.74      +0.098      +0.134
+  yield        be_me           6      0.152      0.138      0.15   0.89      +0.088      +0.094
+  yield        age             6      0.153      0.167      0.20   0.95      +0.088      +0.108
+  yield        amtout          6      0.127      0.124      0.11   0.92      +0.082      +0.104
+  spr_to_d2d   me              6      0.159      0.177      0.26   0.86      +0.081      +0.088
+  yield        eq_dur          6      0.112      0.136      0.16   0.90      +0.078      +0.087
+  spread       amtout          6      0.136      0.124      0.09   0.89      +0.070      +0.058
+  yield        retexc          6      0.308      0.306      0.50   0.13      +0.068      +0.107
+  yield        mom6mspread     6      0.316      0.235      0.38   0.72      +0.068      -0.003
+  spr_to_d2d   market_lev      6      0.147      0.165      0.22   0.84      +0.067      +0.119
+  spr_to_d2d   be_me           6      0.155      0.169      0.24   0.87      +0.062      +0.105
+  yield        D2D             6      0.179      0.193      0.28   0.93      +0.047      +0.142
+  spr_to_d2d   amtout          6      0.130      0.150      0.15   0.90      +0.043      +0.064
+  spread       mom6xrtg        6      0.896      0.243      0.38   0.51      +0.040      -0.118
+  yield        turn_vol        6      0.109      0.121      0.12   0.90      +0.039      +0.039
+  spread       mom6            6      0.348      0.374      0.56   0.81      +0.033      +0.029
+  spr_to_d2d   dolvol          6      0.126      0.112      0.07   0.68      +0.031      +0.031
+  yield        me              6      0.188      0.159      0.21   0.93      +0.031      +0.012
+  yield        market_lev      6      0.099      0.129      0.13   0.90      +0.026      +0.043
+  yield        skew            6      0.166      0.185      0.25   0.93      +0.018      +0.045
+  yield        dolvol          6      0.144      0.110      0.06   0.66      +0.014      +0.015
+  spread       dolvol          6      0.141      0.108      0.06   0.66      +0.009      -0.009
+  spread       retexc          6      0.261      0.263      0.43   0.13      +0.005      +0.002
+  spread       skew            6      0.167      0.170      0.21   0.91      +0.004      +0.056
+  yield        debt_ebitda     6      0.114      0.149      0.16   0.92      +0.002      +0.037
+  spr_to_d2d   yield           6      0.657      0.471      0.70   0.92      -0.005      -0.402
+  spread       coupon          6      0.465      0.211      0.33   0.94      -0.010      -0.203
+  spr_to_d2d   mom6xrtg        6      0.663      0.375      0.59   0.79      -0.011      -0.316
+  spr_to_d2d   retexc          6      0.216      0.236      0.35   0.06      -0.017      -0.026
+  spr_to_d2d   age             6      0.094      0.157      0.17   0.92      -0.018      +0.017
+  spr_to_d2d   skew            6      0.147      0.134      0.15   0.89      -0.020      -0.018
+  spread       vixbeta         6      0.144      0.168      0.24   0.92      -0.025      -0.020
+  yield        duration        6      0.701      0.462      0.60   0.96      -0.029      -0.143
+  spread       duration        6      0.549      0.273      0.41   0.91      -0.029      -0.369
+  spr_to_d2d   coupon          6      0.433      0.212      0.33   0.94      -0.035      -0.251
+  spr_to_d2d   duration        6      0.512      0.250      0.39   0.92      -0.042      -0.301
+  spread       age             6      0.102      0.146      0.17   0.91      -0.046      +0.014
+  spr_to_d2d   vixbeta         6      0.150      0.171      0.23   0.91      -0.050      -0.030
+  spr_to_d2d   spread          6      0.694      0.398      0.61   0.77      -0.052      -0.366
+  spread       spr_to_d2d      6      0.700      0.393      0.60   0.78      -0.056      -0.354
+  spr_to_d2d   mom6mspread     6      0.231      0.222      0.35   0.71      -0.056      -0.048
+  yield        vixbeta         6      0.161      0.208      0.32   0.92      -0.078      +0.000
+  spr_to_d2d   VaR             6      0.471      0.337      0.51   0.92      -0.087      -0.274
+  yield        mom6xrtg        6      0.841      0.342      0.49   0.85      -0.096      -0.234
+  spr_to_d2d   mom6            6      0.286      0.311      0.46   0.75      -0.107      -0.062
+  spr_to_d2d   volatility      6      0.493      0.337      0.51   0.93      -0.110      -0.303
+  spread       volatility      6      0.579      0.348      0.52   0.92      -0.125      -0.267
+  yield        spr_to_d2d      6      0.663      0.478      0.66   0.94      -0.129      -0.405
+  yield        spread          6      0.867      0.373      0.53   0.85      -0.141      -0.257
+  spread       VaR             6      0.550      0.343      0.52   0.92      -0.180      -0.238
+  spread       yield           6      0.873      0.489      0.67   0.88      -0.227      -0.222
+
+The four pairs Sections 3.6 and 3.8 report, for reference:
+  X=yield       Y=duration     stress -0.029, acf1 0.96
+  X=yield       Y=spread       stress -0.141, acf1 0.85
+  X=spread      Y=coupon       stress -0.010, acf1 0.94
+  X=spread      Y=duration     stress -0.029, acf1 0.91

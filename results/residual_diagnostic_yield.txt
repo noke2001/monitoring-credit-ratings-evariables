@@ -1,0 +1,75 @@
+Median within-class Spearman rho, X = yield, scale model = affine, K = 24, reference share = 25%
+Columns: the conditioning variable of the rank correlation.
+  level        rho( Z_(t-1) , X^mc_t )        --- what Section 3.6 tests
+  res-y        rho( Z_(t-1) , X^res_t )       --- map fitted on lagged Y
+  res-self     rho( Z_(t-1) , X^res_t )       --- map fitted on own lag
+Under the corresponding null each is 0 in expectation at every date.
+
+===== Y = duration =====
+  class  |            Z = Y_(t-1)            |            Z = X_(t-1)            |          map slope b
+         |      level      res-y   res-self |      level      res-y   res-self |    median expan/rec 
+  AAA    |      0.913     -0.472      0.207 |      0.969     -0.145      0.171 |     0.216 0.23/0.04
+  AA     |      0.916     -0.242      0.181 |      0.964     -0.018      0.119 |     0.240 0.26/0.03
+  A      |      0.906     -0.182      0.291 |      0.968      0.160      0.202 |     0.245 0.26/0.07
+  BBB    |      0.826     -0.062      0.241 |      0.969      0.419      0.176 |     0.260 0.28/0.09
+  BB     |      0.499     -0.050      0.135 |      0.935      0.724      0.147 |     0.296 0.31/0.12
+  B      |      0.142     -0.066      0.054 |      0.936      0.856      0.168 |     0.176 0.18/0.14
+
+===== Y = spread =====
+  class  |            Z = Y_(t-1)            |            Z = X_(t-1)            |          map slope b
+         |      level      res-y   res-self |      level      res-y   res-self |    median expan/rec 
+  AAA    |      0.883     -0.173      0.040 |      0.969      0.025      0.171 |     2.163 2.24/0.53
+  AA     |      0.842      0.081     -0.001 |      0.964      0.427      0.119 |     1.555 1.68/0.56
+  A      |      0.843      0.137      0.106 |      0.968      0.456      0.202 |     1.309 1.40/0.68
+  BBB    |      0.858      0.200      0.082 |      0.969      0.507      0.176 |     1.131 1.16/0.86
+  BB     |      0.875      0.103      0.116 |      0.935      0.346      0.147 |     0.911 0.92/0.88
+  B      |      0.903      0.045      0.138 |      0.936      0.248      0.168 |     0.900 0.89/0.92
+
+Beyond the median: how often is rho( Y_(t-1), . ) large, and how persistent?
+===== Y = duration =====
+  class  |        share |rho| > 0.3         |  lag-1 autocorrelation of rho_t 
+         |      level      res-y   res-self |      level      res-y   res-self
+  AAA    |       0.96       0.83       0.66 |       0.84       0.97       0.27
+  AA     |       0.97       0.84       0.52 |       0.85       0.98       0.29
+  A      |       1.00       0.80       0.56 |       0.91       0.98       0.37
+  BBB    |       1.00       0.67       0.49 |       0.89       0.98       0.48
+  BB     |       0.85       0.26       0.16 |       0.90       0.95       0.38
+  B      |       0.26       0.17       0.07 |       0.91       0.90       0.09
+
+===== Y = spread =====
+  class  |        share |rho| > 0.3         |  lag-1 autocorrelation of rho_t 
+         |      level      res-y   res-self |      level      res-y   res-self
+  AAA    |       0.97       0.72       0.59 |       0.77       0.92       0.31
+  AA     |       1.00       0.62       0.45 |       0.86       0.93       0.31
+  A      |       1.00       0.62       0.35 |       0.89       0.95       0.37
+  BBB    |       1.00       0.59       0.28 |       0.95       0.91       0.51
+  BB     |       1.00       0.24       0.24 |       0.86       0.74       0.52
+  B      |       1.00       0.36       0.36 |       0.86       0.66       0.38
+
+Reduction in |median rho( Y_(t-1), X_t )| relative to the level:
+  Y=duration  AAA   y    : 0.913 -> 0.472  ( 48.3% removed)
+  Y=duration  AAA   self : 0.913 -> 0.207  ( 77.3% removed)
+  Y=duration  AA    y    : 0.916 -> 0.242  ( 73.6% removed)
+  Y=duration  AA    self : 0.916 -> 0.181  ( 80.2% removed)
+  Y=duration  A     y    : 0.906 -> 0.182  ( 80.0% removed)
+  Y=duration  A     self : 0.906 -> 0.291  ( 67.9% removed)
+  Y=duration  BBB   y    : 0.826 -> 0.062  ( 92.6% removed)
+  Y=duration  BBB   self : 0.826 -> 0.241  ( 70.8% removed)
+  Y=duration  BB    y    : 0.499 -> 0.050  ( 90.0% removed)
+  Y=duration  BB    self : 0.499 -> 0.135  ( 72.9% removed)
+  Y=duration  B     y    : 0.142 -> 0.066  ( 53.9% removed)
+  Y=duration  B     self : 0.142 -> 0.054  ( 62.1% removed)
+
+  Y=spread    AAA   y    : 0.883 -> 0.173  ( 80.4% removed)
+  Y=spread    AAA   self : 0.883 -> 0.040  ( 95.4% removed)
+  Y=spread    AA    y    : 0.842 -> 0.081  ( 90.3% removed)
+  Y=spread    AA    self : 0.842 -> 0.001  ( 99.8% removed)
+  Y=spread    A     y    : 0.843 -> 0.137  ( 83.7% removed)
+  Y=spread    A     self : 0.843 -> 0.106  ( 87.5% removed)
+  Y=spread    BBB   y    : 0.858 -> 0.200  ( 76.6% removed)
+  Y=spread    BBB   self : 0.858 -> 0.082  ( 90.5% removed)
+  Y=spread    BB    y    : 0.875 -> 0.103  ( 88.2% removed)
+  Y=spread    BB    self : 0.875 -> 0.116  ( 86.7% removed)
+  Y=spread    B     y    : 0.903 -> 0.045  ( 95.0% removed)
+  Y=spread    B     self : 0.903 -> 0.138  ( 84.7% removed)
+

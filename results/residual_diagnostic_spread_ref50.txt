@@ -1,0 +1,54 @@
+Median within-class Spearman rho, X = spread, scale model = affine, K = 24, reference share = 50%
+Columns: the conditioning variable of the rank correlation.
+  level        rho( Z_(t-1) , X^mc_t )        --- what Section 3.6 tests
+  res-y        rho( Z_(t-1) , X^res_t )       --- map fitted on lagged Y
+  res-self     rho( Z_(t-1) , X^res_t )       --- map fitted on own lag
+Under the corresponding null each is 0 in expectation at every date.
+
+===== Y = coupon =====
+  class  |            Z = Y_(t-1)            |            Z = X_(t-1)            |          map slope b
+         |      level      res-y   res-self |      level      res-y   res-self |    median expan/rec 
+  AAA    |      0.512      0.206      0.229 |      0.917      0.687      0.237 |     0.165 0.18/0.08
+  AA     |      0.470      0.050      0.185 |      0.910      0.717      0.243 |     0.150 0.15/0.07
+  A      |      0.484      0.127      0.186 |      0.927      0.784      0.311 |     0.167 0.17/0.09
+  BBB    |      0.424      0.028      0.144 |      0.927      0.763      0.192 |     0.244 0.25/0.10
+  BB     |      0.420      0.072      0.137 |      0.920      0.810      0.185 |     0.312 0.33/0.18
+  B      |      0.482      0.144      0.118 |      0.940      0.817      0.167 |     0.422 0.44/0.20
+
+===== Y = duration =====
+  class  |            Z = Y_(t-1)            |            Z = X_(t-1)            |          map slope b
+         |      level      res-y   res-self |      level      res-y   res-self |    median expan/rec 
+  AAA    |      0.755      0.147      0.288 |      0.917      0.598      0.237 |     0.046 0.05/0.04
+  AA     |      0.714      0.156      0.292 |      0.910      0.602      0.243 |     0.056 0.06/0.04
+  A      |      0.709      0.206      0.319 |      0.927      0.656      0.311 |     0.064 0.06/0.06
+  BBB    |      0.633      0.239      0.250 |      0.927      0.756      0.192 |     0.075 0.07/0.08
+  BB     |      0.247      0.029      0.087 |      0.920      0.847      0.185 |     0.083 0.07/0.11
+  B      |     -0.115     -0.043     -0.022 |      0.940      0.900      0.167 |    -0.051 -0.06/0.15
+
+Reduction in |median rho( Y_(t-1), X_t )| relative to the level:
+  Y=coupon    AAA   y    : 0.512 -> 0.206  ( 59.8% removed)
+  Y=coupon    AAA   self : 0.512 -> 0.229  ( 55.2% removed)
+  Y=coupon    AA    y    : 0.470 -> 0.050  ( 89.4% removed)
+  Y=coupon    AA    self : 0.470 -> 0.185  ( 60.5% removed)
+  Y=coupon    A     y    : 0.484 -> 0.127  ( 73.8% removed)
+  Y=coupon    A     self : 0.484 -> 0.186  ( 61.5% removed)
+  Y=coupon    BBB   y    : 0.424 -> 0.028  ( 93.5% removed)
+  Y=coupon    BBB   self : 0.424 -> 0.144  ( 66.2% removed)
+  Y=coupon    BB    y    : 0.420 -> 0.072  ( 82.8% removed)
+  Y=coupon    BB    self : 0.420 -> 0.137  ( 67.3% removed)
+  Y=coupon    B     y    : 0.482 -> 0.144  ( 70.1% removed)
+  Y=coupon    B     self : 0.482 -> 0.118  ( 75.6% removed)
+
+  Y=duration  AAA   y    : 0.755 -> 0.147  ( 80.5% removed)
+  Y=duration  AAA   self : 0.755 -> 0.288  ( 61.8% removed)
+  Y=duration  AA    y    : 0.714 -> 0.156  ( 78.2% removed)
+  Y=duration  AA    self : 0.714 -> 0.292  ( 59.1% removed)
+  Y=duration  A     y    : 0.709 -> 0.206  ( 70.9% removed)
+  Y=duration  A     self : 0.709 -> 0.319  ( 55.1% removed)
+  Y=duration  BBB   y    : 0.633 -> 0.239  ( 62.3% removed)
+  Y=duration  BBB   self : 0.633 -> 0.250  ( 60.6% removed)
+  Y=duration  BB    y    : 0.247 -> 0.029  ( 88.2% removed)
+  Y=duration  BB    self : 0.247 -> 0.087  ( 64.8% removed)
+  Y=duration  B     y    : 0.115 -> 0.043  ( 62.5% removed)
+  Y=duration  B     self : 0.115 -> 0.022  ( 81.2% removed)
+

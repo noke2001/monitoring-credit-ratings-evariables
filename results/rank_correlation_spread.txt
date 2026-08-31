@@ -1,0 +1,23 @@
+Median within-class Spearman rho( Y_(t-1), X_t ),  X = spread (mean-corrected)
+Under H_0 this is 0 in expectation at every date.
+Recession months = official NBER (2007-12--2009-06, 2020-02--2020-04)
+
+===== Y = coupon =====
+  class    median  |rho|>0.3  expansion  recession  n dates
+  AAA       0.505        84%      0.505      0.491      218
+  AA        0.452        80%      0.487      0.313      218
+  A         0.447        75%      0.503      0.167      218
+  BBB       0.415        75%      0.436      0.201      218
+  BB        0.416        74%      0.429      0.252      218
+  B         0.476        80%      0.494      0.284      218
+
+===== Y = duration =====
+  class    median  |rho|>0.3  expansion  recession  n dates
+  AAA       0.748        91%      0.771      0.370      218
+  AA        0.689        89%      0.741      0.128      218
+  A         0.691        87%      0.720      0.099      218
+  BBB       0.608        80%      0.644      0.081      218
+  BB        0.233        42%      0.259     -0.128      218
+  B        -0.126        32%     -0.115     -0.247      218
+
+dependence falls from expansion to recession in 12 of 12 class x covariate cells

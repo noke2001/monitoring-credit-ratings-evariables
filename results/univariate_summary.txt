@@ -1,0 +1,67 @@
+Section 4.2 diagnostics
+panel: 483675 rows, 8758 bonds, 219 dates, 200207--202009
+
+redundancy check (identity of the rank PIT, notch cohorts)
+  mom6xrtg = spread * nrtg on 100.00% of rows;  Z_mom6xrtg == Z_spread on 100.00% of rows
+
+T1  cohort sizes and the PIT lattice
+------------------------------------
+quantity                                     value
+median cohort size n_t                          82
+IQR                                      [44, 168]
+5th / 95th pct                            13 / 445
+share of cohorts with n < 20                 8.05%
+E[Z] under H0 = mean (n+1)/2n               0.5134
+observed mean Z (spread)                    0.5037
+P(Z = 1) observed                           0.0073
+
+T2  ECDF (eq. 4.3) vs the KDE-smoothed CDF the notebook plots
+-------------------------------------------------------------
+covariate       mean |d|   p95 |d|   max |d|
+coupon            0.0161    0.0463    0.1518
+spread            0.0165    0.0497    0.2797
+me                0.0476    0.1337    0.3402
+yield             0.0175    0.0517    0.1667
+mom6xrtg          0.0165    0.0497    0.2797
+sales             0.0609    0.1777    0.3555
+spr_to_d2d        0.0166    0.0500    0.2714
+
+T3  persistence of the cohort PIT (lag-k ACF, contiguous months)
+----------------------------------------------------------------
+covariate        ACF(1)   ACF(3)   ACF(6)  ACF(12)  half-life
+coupon            0.998    0.993    0.985    0.965        300
+duration          0.998    0.995    0.991    0.982        343
+sales             0.993    0.981    0.966    0.938        102
+me                0.985    0.965    0.939    0.897         47
+D2D               0.959    0.894    0.810    0.660         16
+yield             0.944    0.914    0.886    0.842         12
+spread            0.902    0.855    0.816    0.749          7
+spr_to_d2d        0.888    0.811    0.733    0.626          6
+
+T4a  what a rating migration actually is
+----------------------------------------
+quantity                                     value
+month-to-month notch moves                   9,144
+as a share of contiguous pairs               1.93%
+|delta nrtg| = 1                            85.74%
+|delta nrtg| <= 2                           98.12%
+also crosses a letter boundary              38.08%
+bonds with >= 1 notch move                   58.1%
+
+H = 12 months.  observed rows 474,876 of 483,675;  base rate: downgrade 11.35%, upgrade 7.56%, any 18.88%
+
+T4  what one covariate can and cannot resolve
+---------------------------------------------
+covariate       rho(x,nrtg)  AUC adj  AUC far  AUC down   AUC up  AUC any
+coupon               +0.529    0.580    0.971     0.527    0.478    0.494
+spread               +0.709    0.616    0.998     0.634    0.410    0.514
+me                   -0.765    0.642    0.996     0.448    0.586    0.509
+yield                +0.583    0.593    0.982     0.600    0.437    0.505
+sales                -0.598    0.602    0.990     0.505    0.523    0.499
+spr_to_d2d           +0.609    0.610    0.894     0.541    0.458    0.514
+duration             +0.039    0.549    0.638     0.519    0.524    0.487
+D2D                  -0.243    0.604    0.907     0.394    0.566    0.508
+
+AUC adj  = adjacent notches k vs k+1, chance 0.5
+AUC far  = {AAA,AA} vs {B}, chance 0.5
+AUC down/up/any = the PIT as an early-warning score at horizon H

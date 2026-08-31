@@ -1,0 +1,16 @@
+
+============================================================================
+CORRECTED PANEL  (train-window median imputation, month-aligned deltas)
+============================================================================
+  457,037 rows | 8,603 bonds | downgrade-within-12m base rate 4.72%
+
+score                                        ACF(1)  AUC raw  AUC PIT           null
+VAE reconstruction error (unsupervised)       0.855    0.564    0.559   0.499+-0.002
+directional deviation (supervised)            0.905    0.738    0.659   0.500+-0.002
+downgrade tail mass (supervised)              0.874    0.745    0.664   0.500+-0.002
+randomised PIT of the monitored rating        0.319    0.358    0.418   0.500+-0.001
+
+  AUC raw = the score itself; AUC PIT = its within-cohort rank.
+  Chance is 0.500; a value below 0.5 means the score points the
+  other way, which for the randomised PIT is expected (it is a
+  calibration statistic, not a directional one).

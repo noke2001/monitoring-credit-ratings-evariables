@@ -1,0 +1,48 @@
+===== Y = rvol_21d =====
+  AAA   terminal logM =    -342.4 | max logM =       1.2 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.03
+        naive (identity omitted): terminal logM =       -216.2 | largest monthly increment =     54.94 (valid cap log(N+1) = 6.91)
+  AA    terminal logM =    -795.1 | max logM =      -3.1 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.22
+        naive (identity omitted): terminal logM =        439.5 | largest monthly increment =    216.09 (valid cap log(N+1) = 6.91)
+  A     terminal logM =    -172.2 | max logM =     247.5 | first crossing of log20: 200307   | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.61
+        naive (identity omitted): terminal logM =       9156.5 | largest monthly increment =    712.24 (valid cap log(N+1) = 6.91)
+  BBB   terminal logM =   -1437.6 | max logM =       4.2 | first crossing of log20: 200307   | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.59
+        naive (identity omitted): terminal logM =      11833.1 | largest monthly increment =   1294.33 (valid cap log(N+1) = 6.91)
+  BB    terminal logM =   -1049.1 | max logM =      16.0 | first crossing of log20: 200309   | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.25
+        naive (identity omitted): terminal logM =       -280.8 | largest monthly increment =    122.94 (valid cap log(N+1) = 6.91)
+  B     terminal logM =    -781.8 | max logM =     -12.2 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.12
+        naive (identity omitted): terminal logM =       -614.2 | largest monthly increment =     33.76 (valid cap log(N+1) = 6.91)
+  class ordering by terminal evidence: A > AAA > B > AA > BB > BBB
+  min terminal = -1437.6 (BBB), max terminal = -172.2 (A)
+
+===== Y = at_me =====
+  AAA   terminal logM =    -465.7 | max logM =       1.6 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.03
+        naive (identity omitted): terminal logM =       -338.3 | largest monthly increment =     54.94 (valid cap log(N+1) = 6.91)
+  AA    terminal logM =    -918.3 | max logM =     -17.6 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.21
+        naive (identity omitted): terminal logM =        285.1 | largest monthly increment =    203.04 (valid cap log(N+1) = 6.91)
+  A     terminal logM =    -401.4 | max logM =     239.1 | first crossing of log20: 200308   | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.60
+        naive (identity omitted): terminal logM =       9705.1 | largest monthly increment =    742.39 (valid cap log(N+1) = 6.91)
+  BBB   terminal logM =   -2597.9 | max logM =      -6.8 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.54
+        naive (identity omitted): terminal logM =       9612.2 | largest monthly increment =   1291.76 (valid cap log(N+1) = 6.91)
+  BB    terminal logM =   -1504.7 | max logM =       1.5 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.23
+        naive (identity omitted): terminal logM =       -856.0 | largest monthly increment =    148.85 (valid cap log(N+1) = 6.91)
+  B     terminal logM =    -820.9 | max logM =     -15.0 | first crossing of log20: never    | share of terminal logM inside crisis windows =    nan | share of dates at ceiling (R_t=1) = 0.13
+        naive (identity omitted): terminal logM =       -678.3 | largest monthly increment =     30.62 (valid cap log(N+1) = 6.91)
+  class ordering by terminal evidence: A > AAA > B > AA > BB > BBB
+  min terminal = -2597.9 (BBB), max terminal = -401.4 (A)
+
+corr(log E_t, delta class-mean spread), per class:
+  Y=rvol_21d  AAA   corr = -0.044
+  Y=rvol_21d  AA    corr = -0.287
+  Y=rvol_21d  A     corr = -0.273
+  Y=rvol_21d  BBB   corr = -0.466
+  Y=rvol_21d  BB    corr = -0.213
+  Y=rvol_21d  B     corr = -0.029
+  Y=at_me     AAA   corr = -0.064
+  Y=at_me     AA    corr = -0.123
+  Y=at_me     A     corr = -0.136
+  Y=at_me     BBB   corr = -0.414
+  Y=at_me     BB    corr = -0.432
+  Y=at_me     B     corr = -0.134
+
+pooled correlation of spread_mc with rvol_21d_mc: +0.351
+pooled correlation of spread_mc with at_me_mc: +0.142

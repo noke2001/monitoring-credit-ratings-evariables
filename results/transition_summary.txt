@@ -1,0 +1,37 @@
+panel: 483,675 bond-months | 8,758 bonds | 200207--202009
+
+T1  month-to-month migration
+------------------------------------------------------------
+                                        letter       notch
+contiguous month pairs                 474,296     474,296
+migrations                               3,482       9,144
+  of which downgrades                    2,219       5,569
+  of which upgrades                      1,263       3,575
+monthly migration rate                  0.73%       1.93%
+bonds that ever migrate (letter)        30.7%
+bonds that ever migrate (notch)         58.1%
+
+T2  size of a notch migration
+------------------------------------------------------------
+  |delta nrtg| = 1:  7,840  (85.74%)
+  |delta nrtg| = 2:  1,132  (12.38%)
+  |delta nrtg| = 3:    108  ( 1.18%)
+  |delta nrtg| = 4:     35  ( 0.38%)
+  |delta nrtg| = 5:     22  ( 0.24%)
+  |delta nrtg| <= 2 covers 98.12%
+  notch moves that also change the letter class: 38.08%
+
+T3  12-month letter migration matrix (row %, 375,396 bond pairs)
+------------------------------------------------------------------------
+from \ to       AAA       AA        A      BBB       BB        B         n  unchanged
+AAA           89.09    10.91       --       --       --       --     6,313      89.1%
+AA               --    86.96    12.72     0.32       --       --    32,708      87.0%
+A                --     1.64    92.04     6.28     0.03     0.01   132,535      92.0%
+BBB              --       --     2.10    95.41     2.26     0.23   148,369      95.4%
+BB               --       --       --     8.92    85.52     5.56    37,450      85.5%
+B                --       --     0.08     0.24    13.78    85.91    18,021      85.9%
+
+  rows with no observation 12 months later: 22.4%
+  of which the bond has left the panel entirely: 96.6%
+  (maturity, call, or loss of coverage -- these are censored, not
+   'no migration', and Chapter 4 excludes them rather than scoring them)

@@ -1,0 +1,8 @@
+design = sector-blocks | X = yield | partition = SIC division | group = full symmetric | N = 1000
+class   dates   medn  medB  medSec  terminal      peak  ceil%  NBERshare    first
+AAA       213     34     2       2     -67.0      22.4   0.00      +0.58   200310   (8s)
+AA        213    179     5       4     772.8     800.7   0.52      +0.09   200301   (33s)
+A         213    834     8       7    1292.1    1292.1   0.90      +0.12   200301   (436s)
+BBB       213    619     9       8    1342.2    1342.2   0.92      +0.10   200303   (376s)
+BB        213    227     9       8    1043.3    1043.3   0.82      +0.08   200301   (35s)
+B         213    116     8       8     829.8     831.9   0.69      -0.02   200301   (29s)

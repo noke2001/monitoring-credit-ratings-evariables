@@ -1,0 +1,203 @@
+# Migrated from approach1_tabpfn_bash.py (Chapter 4, Section 4.3).
+# Paths now resolve from the repository root; override with the environment
+# variables BOND_CSV (raw panel) and TABPFN_OUT (where per-date fits are
+# appended).  Driven one date at a time by scripts/tabpfn/sweep.sh, which feeds
+# each run the date printed by the previous one.
+import os
+
+# Credentials come from the environment.  Never hard-code them: this file is
+# destined for a public repository.
+#   export TABPFN_TOKEN=...      (https://tabpfn.com  -> API key)
+#   export HF_TOKEN=...          (https://huggingface.co/settings/tokens)
+TABPFN_TOKEN = os.environ.get("TABPFN_TOKEN")
+HF_TOKEN = os.environ.get("HF_TOKEN")
+if not TABPFN_TOKEN or not HF_TOKEN:
+    raise SystemExit(
+        "TABPFN_TOKEN and HF_TOKEN must be set in the environment.\n"
+        "  export TABPFN_TOKEN=...\n  export HF_TOKEN=...")
+
+# local
+import os
+os.environ["TABPFN_TOKEN"] = TABPFN_TOKEN
+os.environ["HF_TOKEN"] = HF_TOKEN
+os.environ["TABPFN_ALLOW_CPU_LARGE_DATASET"] = "1"
+
+# --- PATHS -------------------------------------------------------------------
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BOND_CSV = os.environ.get(
+    "BOND_CSV", os.path.join(os.path.dirname(_ROOT),
+                             "CorpBond_Reconciling", "corp_jkp_mergedv2.csv"))
+OUT_DIR = os.environ.get("TABPFN_OUT", os.path.join(_ROOT, "results", "tabpfnfit"))
+os.makedirs(OUT_DIR, exist_ok=True)
+
+# remote
+# from tabpfn_client import set_access_token
+# set_access_token(TABPFN_TOKEN)
+
+from tabpfn import TabPFNClassifier
+import torch
+from scipy.stats import kstest
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import polars as pl
+
+from datetime import datetime
+
+import tracemalloc
+import gc
+
+import sys
+import argparse
+
+TARGET = "rtg"                 # choose "nrtg" or "rtg" as the target variable for prediction
+HISTORY_WINDOW_MONTHS = 10000       # Set the history window in months
+MIN_HISTORY_WINDOW_MONTHS = 1   # Set the minimum history window in months
+
+def main():
+    try:
+        parser = argparse.ArgumentParser(description="Processes a value and yields the next one.")
+        parser.add_argument("input_value", type=str, help="The value passed from the bash script")
+        args = parser.parse_args()
+        current_date = args.input_value
+        current_date = np.datetime64(current_date)
+    except Exception:
+        current_date = np.datetime64('2003-12-01T00:00:00.000000000')
+
+    # import dataset
+    dataset = pd.read_csv(BOND_CSV, low_memory=False)
+    df = pl.from_pandas(dataset)
+
+    # remove superflueous columns
+    useless_cols = ['convertflg']
+    id_cols = ['cusip', 'compsym', 'bondsym', 'permno_CORPTBL', 'PERMNO_permno', 'PERMCO_permco', 'id', 'sic']
+    df = df.drop(useless_cols + id_cols)
+    df = df.rename({"isin": "bond_id"})
+
+    dataset = df.to_pandas()
+    dataset["dates"] = pd.to_datetime(dataset["dates"], format="%Y%m")
+    dataset.dropna(inplace=True)
+    dates = np.sort(np.unique(dataset["dates"].values))
+    next_date = dates[np.searchsorted(dates, current_date) + 1] if np.searchsorted(dates, current_date) + 1 < len(dates) else "STOP"
+
+    if TARGET == "rtg":
+        rating_map = {"AAA":1, "AA":2, "A":3, "BBB":4, "BB":5, "B":6}
+    accuracy_list = []  
+
+    date = current_date
+    print(f"\nProcessing date: {date}")
+    
+    current_data = dataset[dataset["dates"] == date]
+    historical_data = dataset[
+        (dataset["dates"] < date)
+        & (dataset["dates"] >= (pd.to_datetime(date) - pd.DateOffset(months=HISTORY_WINDOW_MONTHS)))
+    ]
+
+    excluded_cols = ['rtg', 'nrtg', 'dates', 'bond_id', 'mom6xrtg', 'nextdate', 'nextret', 'nextretexc', 'nextretwins', 'nextretexcwins']
+    feature_cols = [c for c in historical_data.columns if c not in excluded_cols]
+    # print(f"Feature columns: {feature_cols}")
+
+    X_train = historical_data[feature_cols].to_numpy(copy=True)
+    y_train = historical_data[TARGET].to_numpy(copy=True)
+    X_test = current_data[feature_cols].to_numpy(copy=True)
+    y_test = current_data[TARGET].to_numpy(copy=True)
+    
+    print(f"Data shape -> Train: {X_train.shape}, Test: {X_test.shape}")
+
+    if torch.mps.is_available():
+        clf = TabPFNClassifier(device='mps')
+    elif torch.cuda.is_available():
+        clf = TabPFNClassifier(device="cuda")
+    else:
+        clf = TabPFNClassifier(device='cpu')
+
+    with torch.no_grad():
+        clf.fit(X_train, y_train)
+        prediction_probabilities = clf.predict_proba(X_test)
+        
+        pred_indices = np.argmax(prediction_probabilities, axis=1)
+        predictions = clf.classes_[pred_indices]
+        
+        accuracy = accuracy_score(y_test, predictions)
+        accuracy_list.append((date, accuracy))
+        
+    bond_ids_test = current_data["bond_id"].to_numpy(copy=True)
+
+    proba_df = pd.DataFrame(prediction_probabilities, columns=clf.classes_, index=current_data.index)
+    if TARGET == "rtg":
+        numeric_weights = pd.Series({cls: rating_map[cls] for cls in clf.classes_ if cls in rating_map})
+    else:
+        numeric_weights = pd.Series({cls: cls for cls in clf.classes_})
+    expected_ratings = proba_df[numeric_weights.index].dot(numeric_weights)
+    
+    bond_rankings = pd.DataFrame({
+        "bond_id": bond_ids_test,
+        "actual_rtg": y_test,
+        "pred_rtg": predictions,
+        "expected_rtg": expected_ratings.to_numpy(copy=True), 
+    }, index=current_data.index)
+    
+    if TARGET == "rtg":
+        bond_rankings["actual_numeric"] = bond_rankings["actual_rtg"].map(rating_map)
+    else:
+        bond_rankings["actual_numeric"] = bond_rankings["actual_rtg"]
+    bond_rankings["directional_deviation"] = bond_rankings["expected_rtg"] - bond_rankings["actual_numeric"]
+
+    group_counts = bond_rankings.groupby("actual_rtg")["directional_deviation"].transform('count')
+    bond_rankings["within_class_std_rank"] = (
+        # ASCENDING: directional_deviation > 0 means the model rates the bond
+        # WORSE than its label (1=AAA..6=B), i.e. a downgrade candidate, and
+        # such a bond must land near 1 -- the convention the write-up and the
+        # one-sided E-values in Chapter 4 assume.  This was ascending=False.
+        bond_rankings.groupby("actual_rtg")["directional_deviation"].rank(ascending=True) / group_counts
+    )
+
+    # 1. Create a new dataframe extracting the necessary columns from bond_rankings
+    current_tab_df = bond_rankings[[
+        "bond_id", 
+        "expected_rtg", 
+        "pred_rtg", 
+        "actual_rtg", 
+        "directional_deviation", 
+        "within_class_std_rank"
+    ]].copy()
+    
+    # 2. Add the date column to the new dataframe
+    current_tab_df.insert(1, "date", date) # Inserts 'date' right after 'bond_id'
+    
+    # 3. Handle the CSV file check and append
+    file_path = f"{OUT_DIR}/tabpfn_data_{TARGET}_{HISTORY_WINDOW_MONTHS}.csv"
+    
+    # Check if file exists so we know whether to write the header
+    file_exists = os.path.isfile(file_path)
+    
+    # Write to CSV using mode='a' (append)
+    # If the file doesn't exist, pandas creates it and writes the header (because file_exists is False)
+    # If it does exist, pandas just appends the rows without duplicating the header
+    current_tab_df.to_csv(file_path, mode='a', header=not file_exists, index=False)
+
+    # --- MEMORY MANAGEMENT AND CLEANUP ---
+    del clf 
+
+    del X_train, y_train, X_test, y_test
+    del prediction_probabilities, proba_df, bond_rankings
+    del current_data, historical_data, feature_cols
+    del expected_ratings, predictions, numeric_weights, group_counts, bond_ids_test
+    del pred_indices
+    
+    gc.collect()
+    gc.collect()
+
+    # flags_df = pd.DataFrame(flagged_bonds)
+        
+    if next_date == "STOP":
+        print("STOP")
+    else:
+        # Convert np.datetime64 to pd.Timestamp so .strftime() works
+        print(pd.to_datetime(next_date).strftime('%Y-%m-%d'))
+
+if __name__ == "__main__":
+    main()

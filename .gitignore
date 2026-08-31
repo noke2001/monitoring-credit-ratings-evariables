@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# Thesis writing drafts -- kept local, not published
+# ---------------------------------------------------------------------------
+thesis_edits/
+
+# ---------------------------------------------------------------------------
+# Files that exceed GitHub's 100 MB per-file hard limit (132 MB each).
+# Regenerate these locally; do NOT commit them.
+# ---------------------------------------------------------------------------
+results/sequential_f_t_minus_1_vae_results.csv
+results/semi_supervised_fresh_inference_results.csv
+
+# Safety net: block any future file over the limit from sneaking in.
+# (Add specific large outputs here as they appear.)
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# ---------------------------------------------------------------------------
+# macOS / editors
+# ---------------------------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# ---------------------------------------------------------------------------
+# LaTeX build artefacts
+# ---------------------------------------------------------------------------
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk

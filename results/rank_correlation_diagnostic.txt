@@ -1,0 +1,12 @@
+Median within-class Spearman rho( Y_{t-1}, X_t ), X = yield (mean-corrected)
+Recession months = official NBER (2007-12--2009-06, 2020-02--2020-04)
+
+class   dur: all  expansion  recession |  spr: all  expansion  recession
+AAA        0.918      0.921      0.883 |     0.870      0.893      0.639
+AA         0.916      0.923      0.700 |     0.818      0.854      0.640
+A          0.900      0.910      0.647 |     0.834      0.851      0.637
+BBB        0.821      0.834      0.700 |     0.853      0.863      0.531
+BB         0.494      0.500      0.294 |     0.862      0.886      0.623
+B          0.127      0.118      0.183 |     0.899      0.906      0.701
+
+dependence falls from expansion to recession in 11 of 12 class x covariate cells

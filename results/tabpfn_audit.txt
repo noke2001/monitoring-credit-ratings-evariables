@@ -1,0 +1,137 @@
+Section 4.3 audit of the saved TabPFN fits   (horizon = 12 months)
+
+==============================================================================
+A1  provenance and integrity
+==============================================================================
+file                                               rows  ragged  argmax=label
+tabpfn_data_rtg_12_wprobs.csv                   247,177      no       100.00%
+tabpfn_data_rtg_12_onlytrans.csv                247,177      no       100.00%
+tabpfn_data_rtg_12_fresh_fit_minbonds_10.csv    247,177      no       100.00%
+tabpfn_data_rtg_24_fresh_fit_minbonds_10.csv    247,177      no       100.00%
+tabpfn_delta_fit_rtg_12m.csv                    470,436      no       100.00%
+tabpfn_delta_fit_dom_50_rtg_12m.csv             470,436      no       100.00%
+tabpfn_delta_fit_dom_50_rtg_24m.csv             456,880      no       100.00%
+tabpfn_delta_fit_dom_40_rtg_24m_new.csv         456,880      no       100.00%
+tabpfn_horizon_fit_results_10000_24_16.csv      427,228      no       100.00%
+tabpfn_data_nrtg_12_wprobs.csv                  247,177     YES         8.54%
+tabpfn_data_nrtg_1_wprobs.csv                    11,194     YES        57.28%
+tabpfn_data_nrtg_6_wprobs.csv                   247,177     YES         9.66%
+tabpfn_data_rtg_3_wprobs.csv                    247,177     YES        99.84%
+tabpfn_data_rtg_2_wprobs.csv                    247,177     YES        99.69%
+tabpfn_data_rtg_1_wprobs.csv                    479,516     YES        99.53%
+
+  'ragged' = rows in the file do not all have the same number of fields.
+  The per-date append writes one prob_* column per class present in that
+  date's training context, but the header is fixed at the first date's set,
+  so from the first missing class onward the probability columns are shifted.
+  The seven leading columns are written before the block and stay correct.
+
+==============================================================================
+A2  the accuracy paradox
+==============================================================================
+configuration                                inst.  trans.     fwd    base  fwd-base
+level target, K=12                           0.985   0.020   0.917   0.929    -0.013
+level target, transition-only context        0.825   0.312   0.790   0.929    -0.139
+level target, fresh-rating context           0.946   0.100   0.886   0.929    -0.043
+level target, fresh-rating, K=24             0.949   0.108   0.888   0.929    -0.041
+delta target, K=12                           0.881   0.194   0.829   0.926    -0.097
+delta target, K=12, dom cap 50%              0.944   0.132   0.882   0.926    -0.044
+delta target, K=24, dom cap 50%              0.912   0.185   0.857   0.926    -0.069
+delta target, K=24, dom 40% + fresh ratio    0.598   0.465   0.586   0.926    -0.340
+FORWARD delta target, 10k context, 16 feats          (forward target -- not comparable)
+
+  inst.  = Pred_t == Actual_t          trans. = the same, restricted to months
+                                          in which the rating actually moved
+  fwd    = Pred_t == Actual_(t+H)      base   = Actual_t == Actual_(t+H), the
+                                          do-nothing persistence forecast
+
+==============================================================================
+A3  early warning from the PIT of the learned score
+==============================================================================
+  PIT recomputed in the ASCENDING convention: downgrade candidate near 1.
+
+configuration                               AUC down   AUC up  best lift            null   stored
+level target, K=12                             0.656    0.362      0.156    0.500+-0.003    0.345
+level target, transition-only context          0.673    0.301      0.199    0.499+-0.004    0.329
+level target, fresh-rating context             0.678    0.347      0.178    0.499+-0.003    0.324
+level target, fresh-rating, K=24               0.678    0.352      0.178    0.501+-0.004    0.324
+delta target, K=12                             0.622    0.360      0.140    0.501+-0.002    0.378
+delta target, K=12, dom cap 50%                0.625    0.350      0.150    0.500+-0.003    0.375
+delta target, K=24, dom cap 50%                0.618    0.343      0.157    0.501+-0.002    0.382
+delta target, K=24, dom 40% + fresh ratio      0.624    0.338      0.162    0.499+-0.003    0.377
+FORWARD delta target, 10k context, 16 feats     0.552    0.447      0.053    0.499+-0.002        -
+
+  chance = 0.500.  'null' permutes the PIT within the evaluated rows.
+  'stored' = AUC(stored within_class_std_rank -> downgrade).  It sits
+  BELOW 0.5 everywhere, mirroring the recomputed column: that is the
+  sign inversion of A4, measured.
+
+  stability of the strongest signal, by rating class and sub-period:
+  (AUC -> downgrade throughout, to match the column above)
+    level target, K=12
+      AAA 0.539  AA 0.707  A 0.627  BBB 0.778  BB 0.551  | 1st half 0.647  2nd half 0.668
+    level target, transition-only context
+      AAA 0.427  AA 0.714  A 0.634  BBB 0.801  BB 0.635  | 1st half 0.654  2nd half 0.697
+    level target, fresh-rating context
+      AAA 0.566  AA 0.738  A 0.647  BBB 0.793  BB 0.577  | 1st half 0.662  2nd half 0.698
+
+==============================================================================
+A3b  which summary function?  (level target, K=12)
+==============================================================================
+  Five ways to condense the predictive vector against the carried
+  rating, all oriented so that large = downgrade candidate, each
+  ranked within its (date, rating) cohort exactly as in 4.2.
+
+summary                    ACF(1)  AUC down   AUC up    lift   alternative
+directional_deviation       0.619     0.656    0.362   0.156     two-sided
+log_TRR                     0.674     0.671    0.360   0.171     two-sided
+log_TRR_dz_0.9999           0.577     0.644    0.362   0.144     two-sided
+log_TRR_dz_0.9              0.242     0.448    0.571   0.071     two-sided
+brier_loss                  0.496     0.579    0.511   0.079     one-sided
+ranked_probability          0.496     0.580    0.513   0.080     one-sided
+log_score                   0.495     0.580    0.511   0.080     one-sided
+
+  modified TRR: neutralise log-TRR where P(carried) > th
+    th            % neutralised   ACF(1)  AUC down    lift   AUC | th-subset
+    None                  0.0%    0.674    0.6707  0.1707                 -
+    0.9999               41.0%    0.577    0.6437  0.1437            0.5849
+    0.999                72.1%    0.422    0.5542  0.0841            0.6462
+    0.99                 87.3%    0.326    0.4804  0.0196            0.6689
+    0.95                 93.3%    0.265    0.4518  0.0586            0.6725
+    0.9                  95.2%    0.242    0.4478  0.0711            0.6731
+    'AUC | th-subset' is the UNMODIFIED ratio scored only on the rows
+    the dead-zone would neutralise.  It stays well above 0.5, so those
+    vanishing tails are signal, not numerical noise, and neutralising
+    them costs power.  What the dead-zone does buy is a much less
+    persistent PIT -- the same trade the scoring rules make.
+
+  does the cardinal encoding enc(r) matter for eq. (4.dd)?
+    linear 1..6 (default)     AUC down 0.6563
+    notch midpoints           AUC down 0.6560
+    hist. default rate %      AUC down 0.6569
+    log default rate          AUC down 0.6592
+    convex 1,2,4,..,32        AUC down 0.6576
+    spread across encodings            0.0032   <- immaterial
+    Brier and the log score need NO encoding; RPS and log-TRR need
+    only the ORDER.  So the encoding objection to the deviation is
+    an inelegance, not a defect, and the case for the scoring rules
+    rests on propriety instead.
+
+  The directional constructions read the sign of the shift; the
+  proper scoring rules read its magnitude, so they cannot separate
+  an imminent upgrade from an imminent downgrade and their two AUCs
+  sit on the same side of one half.  That is why Section 4.4 tests
+  them against the one-sided alternative alone.
+
+==============================================================================
+A4  sign convention of the stored PIT
+==============================================================================
+  Every script stores within_class_std_rank as
+      rank(directional_deviation, ascending=False) / count,
+  and DD = expected_rating - actual_rating with 1=AAA .. 6=B, so a bond
+  the model thinks is WORSE than its label has DD > 0 and lands near 0.
+  Meeting 7 §3.1.1 states the opposite ('downgrade -> PIT near 1').
+  Measured, over every configuration above: AUC(PIT -> downgrade) < 0.5
+  and AUC(PIT -> upgrade) > 0.5, confirming the stored PIT is inverted
+  relative to the write-up.  One-sided E-values built on it fire on the
+  wrong tail; the fix is ascending=True, or 1 - Z downstream.
