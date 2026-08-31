@@ -179,7 +179,7 @@ Chapter 3 is pure numpy/scipy — **no R or rpy2**: the Frank densities the lega
 notebooks took from the R `copula` package are computed natively and certified
 against `mpmath` in `tests/test_frank_copula.py`. Chapter 4 needs torch and
 lightgbm. `src/univariate.py` and `src/tabpfn_panel.py` run under either.
-Specs in `../environment-copula.yml` and `../environment-bond.yml`.
+Specs in `environment-copula.yml` and `environment-bond.yml`.
 
 ---
 

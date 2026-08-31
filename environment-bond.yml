@@ -1,0 +1,47 @@
+# ---------------------------------------------------------------------------
+# Chapter 4 -- Outlier Detection
+#
+#   conda env create -f environment-bond.yml
+#   conda activate bond
+#
+# Needs torch, lightgbm and TabPFN. Runs numpy 2.x, so it is NOT
+# interchangeable with `copula` (numpy 1.26). src/univariate.py and
+# src/tabpfn_panel.py are the only modules that run under either.
+#
+# scripts/tabpfn/* read TABPFN_TOKEN and HF_TOKEN from the environment and
+# refuse to start without them -- no credentials are stored here.
+#
+#   export TABPFN_TOKEN=...   # https://tabpfn.com -> API key
+#   export HF_TOKEN=...       # https://huggingface.co/settings/tokens
+#
+# Captured from the environment verified 2026-08-24 (osx-arm64). No build
+# strings are pinned. torch is installed via pip: the conda-forge build does
+# not cover the python 3.14 / torch 2.12 combination this environment uses.
+# ---------------------------------------------------------------------------
+name: bond
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.14.4
+  - numpy=2.4.4               # 2.x line required -- see environment-copula.yml
+  - scipy=1.17.1
+  - polars=1.39.0
+  - matplotlib=3.10.9
+  - seaborn=0.13.2
+  - pip
+
+  - pip:
+      - torch==2.12.0
+      - lightgbm==4.6.0
+      - tabpfn==8.0.8
+      - tabpfn-client==0.3.1
+      - tabpfn-common-utils==0.2.19   # version-locked against tabpfn
+      - huggingface-hub==1.19.0
+      - scikit-learn==1.6.1
+      - pandas==2.3.3
+      - pyarrow==23.0.1
+      - requests==2.34.2
+      - tqdm==4.67.3

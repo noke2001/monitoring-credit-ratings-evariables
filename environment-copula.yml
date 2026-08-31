@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Chapter 3 -- Testing Exchangeability
+#
+#   conda env create -f environment-copula.yml
+#   conda activate copula
+#
+# Pure numpy/scipy: no R, no rpy2, no torch. The Frank copula densities that
+# the legacy notebooks took from the R `copula` package are computed natively
+# and certified against mpmath in tests/test_frank_copula.py.
+#
+# The numpy pin is load-bearing, not cosmetic. Chapter 3 is fixed on the
+# numpy 1.x line; this environment is NOT interchangeable with `bond`, which
+# runs numpy 2.x. See environment-bond.yml.
+#
+# Captured from the environment verified 2026-08-24 (osx-arm64). No build
+# strings are pinned, so the spec also solves on linux-64.
+# ---------------------------------------------------------------------------
+name: copula
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.11.14
+  - numpy=1.26.4              # 1.x line required -- do not bump to 2.x
+  - pip
+
+  - pip:
+      - scipy==1.17.1
+      - mpmath==1.4.1         # certifies the Frank densities in tests/
+      - polars==1.40.1
+      - pyarrow==24.0.0       # polars interop
+      - pandas==2.3.3
+      - matplotlib==3.10.9
+      - seaborn==0.13.2
+      - scikit-learn==1.8.0
+      - tqdm==4.68.3
