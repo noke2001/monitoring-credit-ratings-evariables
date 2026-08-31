@@ -1,8 +1,8 @@
 # Monitoring Credit Ratings with E-Variables — codebase
 
-Code for the ETH Zürich master's thesis *Monitoring Credit Ratings with
+Code for my Master's Thesis *Monitoring Credit Ratings with
 E-Variables* (2026). **This directory is the whole repository**: everything the
-thesis cites is either here or regenerable from here, and nothing outside it is
+thesis cites is either here or can be generated from here, and nothing outside it is
 needed to read the code.
 
 | Chapter | Question | Code |
@@ -167,6 +167,8 @@ export HF_TOKEN=...       # https://huggingface.co/settings/tokens
 ---
 
 ## Environments — they are not interchangeable
+
+The .yaml are available from within the codebase. Note that they were built for MacOS, meaining that Windows and Linux users ight have to tweak them to work.
 
 ```bash
 conda activate copula   # Chapter 3          numpy 1.26, polars, scipy, mpmath
